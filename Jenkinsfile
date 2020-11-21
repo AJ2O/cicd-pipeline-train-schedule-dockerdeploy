@@ -17,6 +17,7 @@ pipeline {
                     app = docker.build("aobatolu/train-schedule2")
                     app.inside {
                         sh 'echo $(curl localhost:8080)'
+                        sh 'echo $(ls .)'
                     }
                 }
             }
@@ -30,11 +31,12 @@ pipeline {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
                         app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
+                        app.push("final")
                     }
                 }
             }
         }
-        stage('Deploy to Production') {
+        stage('Deploy to Production Again') {
             when {
                 branch 'master'
             }
